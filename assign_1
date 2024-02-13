@@ -1,0 +1,41 @@
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function checkArraySort(arr) {
+    let isAscending = true;
+    let isDescending = true;
+
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] < arr[i - 1]) {
+            isAscending = false;
+        }
+        if (arr[i] > arr[i - 1]) {
+            isDescending = false;
+        }
+    }
+
+    if (isAscending) {
+        return 1;
+    } else if (isDescending) {
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+rl.question('Enter 5 numbers separated by space: ', (input) => {
+    const numbers = input.trim().split(' ').map(Number);
+
+    if (numbers.length !== 5) {
+        console.log('Please enter exactly 5 numbers.');
+        rl.close();
+        return;
+    }
+
+    console.log('Result:', checkArraySort(numbers));
+    rl.close();
+});
