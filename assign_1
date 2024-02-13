@@ -1,41 +1,51 @@
-const readline = require('readline');
+const readline = require("readline");
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-function checkArraySort(arr) {
-    let isAscending = true;
-    let isDescending = true;
-
-    for (let i = 1; i < arr.length; i++) {
-        if (arr[i] < arr[i - 1]) {
-            isAscending = false;
-        }
-        if (arr[i] > arr[i - 1]) {
-            isDescending = false;
-        }
-    }
-
-    if (isAscending) {
-        return 1;
-    } else if (isDescending) {
-        return -1;
+function checkSorted(array) {
+  let prev = array[0];
+  let order = 0;
+  for (let i = 1; i < array.length; i++) {
+    let curr = array[i];
+    if (order === 0) {
+      if (curr > prev) {
+        order = 1;
+      } else if (curr < prev) {
+        order = -1;
+      }
     } else {
-        return 0;
+      if (order === 1 && curr < prev) {
+        order = 0;
+        break;
+      } else if (order === -1 && curr > prev) {
+        order = 0;
+        break;
+      }
     }
+    prev = curr;
+  }
+  return order;
 }
 
-rl.question('Enter 5 numbers separated by space: ', (input) => {
-    const numbers = input.trim().split(' ').map(Number);
+function stringToArray(string) {
+  return string.split(",").map(Number);
+}
 
-    if (numbers.length !== 5) {
-        console.log('Please enter exactly 5 numbers.');
-        rl.close();
-        return;
+function processInput() {
+  rl.question("Enter a string of numbers separated by comma (or type 'exit' to quit):", (input) => {
+    if (input.toLowerCase() === 'exit') {
+      rl.close();
+      return;
     }
 
-    console.log('Result:', checkArraySort(numbers));
-    rl.close();
-});
+    let array = stringToArray(input);
+    let result = checkSorted(array);
+    console.log("Result:", result);
+    processInput();
+  });
+}
+
+processInput();
